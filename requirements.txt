@@ -5,3 +5,4 @@ Flask-Mail
 Flask-WTF
 requests
 Werkzeug
+psycopg2-binary

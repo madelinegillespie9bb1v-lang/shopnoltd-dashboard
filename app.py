@@ -1,25 +1,44 @@
 from flask import Flask
+import os
 from config import Config
 from extensions import db, mail
 
 def create_app():
-    app = Flask(__name__)
-    app.config.from_object(Config)
+app = Flask(**name**)
+app.config.from_object(Config)
 
-    db.init_app(app)
-    mail.init_app(app)
+```
+# Initialize extensions  
+db.init_app(app)  
+mail.init_app(app)  
 
-    from routes.auth_routes import auth_bp
-    from routes.dashboard_routes import dashboard_bp
-    from routes.device_routes import device_bp
+# Import blueprints  
+from routes.auth_routes import auth_bp  
+from routes.dashboard_routes import dashboard_bp  
+from routes.device_routes import device_bp  
 
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(dashboard_bp)
-    app.register_blueprint(device_bp)
+# Register blueprints  
+app.register_blueprint(auth_bp)  
+app.register_blueprint(dashboard_bp)  
+app.register_blueprint(device_bp)  
 
-    return app
+# Create database tables  
+with app.app_context():  
+    from models.models import User, LoggedUser  
+    db.create_all()  
+
+# Health check route (for uptime monitoring)  
+@app.route("/ping")  
+def ping():  
+    return "ok", 200  
+
+return app  
+```
 
 app = create_app()
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+# ================= RUN =================
+
+if **name** == "**main**":
+port = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=port)
